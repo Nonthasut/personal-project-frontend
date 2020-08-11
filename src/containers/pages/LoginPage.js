@@ -1,11 +1,18 @@
 import React, {useState} from 'react'
 import axios from '../../config/axios'
+import LocalStorage from '../../config/service'
 function LoginPage() {
     const [username,setUsername] = useState('')
     const [password,setPassword] = useState('')
     const login = async()=>{
-    const token = await axios.post('/users/login',{username,password})
-    console.log(token)
+    try{
+    const token =  axios.post('/users/login',{username,password})
+    LocalStorage.setToken(token.data.token)
+    }
+    catch(err){
+    console.log(err)
+    }
+      
     }
     return (
         <div>

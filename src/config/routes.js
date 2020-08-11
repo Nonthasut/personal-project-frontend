@@ -49,17 +49,21 @@ const components = {
 };
 
 export default {
-    guest: [
+    guest:{ allowedRoutes:[
         components.home,
         components.introduceWebsite,
         components.login,
         components.register,
     ],
-    user: [
+    redirectRoutes:'/login'
+},
+    user:{ allowedRoutes:[
         components.income,
         components.expenditure,
         components.target,
         components.profile,
         components.editProfile,
     ],
+    redirectRoutes:'/profile'
+}
 };

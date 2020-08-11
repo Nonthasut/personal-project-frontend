@@ -4,7 +4,8 @@ import { Redirect, Switch, Route } from 'react-router-dom'
 function PrivateRoutes(props) {
     const role = props.role || 'guest';
 
-    const allowRoutes = ConfigRoutes[role].allowRoutes;
+    const allowRoutes = ConfigRoutes[role].allowedRoutes;
+   
     const redirectRoute = ConfigRoutes[role].redirectRoutes;
 
     return (
@@ -15,7 +16,7 @@ function PrivateRoutes(props) {
                     key={route.url}
                     exact
                 >
-                    <route.component setRole={props.setRole} />
+                <route.page setRole={props.setRole} />
                 </Route>
             ))}
             <Redirect to={redirectRoute}/>
