@@ -43,7 +43,7 @@ const components = {
         page: Profile
     },
     target: {
-        url: 'target',
+        url: '/target',
         page: Target
     }
 };

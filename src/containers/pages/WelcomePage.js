@@ -1,12 +1,20 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 
-function WelcomePage() {
+function WelcomePage(props) {
+    const linkToLogIn =()=>{
+    props.history.push('/login')
+    }
+    const linkToIntro =()=>{
+    props.history.push('/intro')
+    }
     return (
         <div>
-           
-            WelcomePage
+            <h1>WelcomePage</h1>
+            <button onClick={linkToLogIn}>Skip</button>
+            <p onClick={linkToIntro}>Click here to continue</p>
         </div>
     )
 }
 
-export default WelcomePage
+export default withRouter(WelcomePage)
