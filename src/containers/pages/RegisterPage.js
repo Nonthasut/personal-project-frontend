@@ -123,7 +123,7 @@ function RegisterPage(props) {
                     {
                       type: 'object',
                       required: true,
-                      message: 'Please select birthdate',
+                      message: 'Please select birthday',
                     },
                 ]}
                   >

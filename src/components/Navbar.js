@@ -1,5 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
+import {Button} from 'antd'
 function Navbar(props) {
     const linkToProfile=()=>{
         props.history.push('/profile')
@@ -16,10 +17,10 @@ function Navbar(props) {
     return (
         <div>
 
-        <span><button onClick={linkToProfile}>Profile page</button> </span>
-        <span><button onClick={linkToIncome}>Income page</button> </span>
-        <span><button onClick={linkToExpenditure}>Expenditure page</button></span>
-        <span><button onClick={linkToTarget}>Target page</button></span>
+        <span><Button onClick={linkToProfile}>Profile page</Button> </span>
+        <span><Button onClick={linkToIncome}>Income page</Button> </span>
+        <span><Button onClick={linkToExpenditure}>Expenditure page</Button></span>
+        <span><Button onClick={linkToTarget}>Target page</Button></span>
         
         </div>
     )
