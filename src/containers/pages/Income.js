@@ -5,6 +5,7 @@ import LocalStorageService from '../../config/service'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 
+
 function Income(props) {
 
     const [form] = Form.useForm();
@@ -12,10 +13,7 @@ function Income(props) {
     const { Header, Content } = Layout;
 
     const { Option } = Select;
-    function handleChange(value) {
-        console.log(`selected ${value}`);
 
-    }
 
     const [userData, setUserData] = useState('')
 
@@ -32,10 +30,16 @@ function Income(props) {
         }
     }, [])
 
+
+    const monthRemainToRetired = Math.floor(((((new Date(userData.retired_time)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
+    const monthRemainToRestInPeace = Math.floor(((((new Date(userData.rest_in_peace)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
+
+
     const onFinish = values => {
         console.log('Received values of form: ', values);
         const body = {
-            income_list: values.income_list
+            income_list: values.income_list,
+            income_value: (values.numberUnitOfTime * values.unitOfTime) * values.valueOfIncome
         }
 
         axios.post(`/incomes`, body)
@@ -43,7 +47,7 @@ function Income(props) {
                 notification.success({
                     message: `Add income's list already.`
                 })
-                props.history.post(`/incomes/${userData.id}`)
+                props.history.push(`/incomes/${userData.id}`)
             })
             .catch(err => {
                 notification.error({
@@ -52,14 +56,6 @@ function Income(props) {
             })
 
     };
-
-    const monthRemainInYourLife = Math.floor(((((new Date(userData.rest_in_peace_time))-new Date(userData.birthday))/(1000*3600*24))/365)*12) 
-
-        const [valueIncome,setValueIncome]= useState({
-            listIncome: 0
-        })
-
-
 
 
     return (
@@ -95,44 +91,38 @@ function Income(props) {
                                 </Form.Item>
 
                                 <Form.Item
-                                    name='unitOfTime'
+                                    name="numberUnitOfTime"
                                     label='จะได้รับรายได้จากรายการนี้ทุกๆ'
                                     rules={[
                                         {
-                                            // required: true,
+                                            required: true,
                                             message: 'กรุณากรอกจำนวนรอบการได้รับรายได้'
                                         },
                                     ]}
                                     hasFeedback
                                 >
+
                                     <Input />
-                    ครั้งต่อ
-                    <Select defaultValue="30" style={{ width: 120 }} onChange={handleChange}>
-                                        <Option value="30">วัน</Option>
-                                        <Option value="4">สัปดาห์</Option>
-                                        <Option value="1">เดือน</Option>
-                                        <Option value="12(เอาไปเป็นตัวหารใช้parseInt)">ปี</Option>
-
-                                    </Select>
-
                                 </Form.Item>
 
+
                                 <Form.Item
-                                    name="quantityOfIncome"
-                                    label="จะได้รับรายได้จากรายการนี้ทั้งหมดกี่รอบ (สามารถตั้งให้เป็นจำนวนครั้ง หรือ จนกว่าจะเกษียณ หรือ จนกว่าจะเสียชีวิตได้)"
+                                    name='unitOfTime'
+                                    label='ครั้งต่อ'
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'กรุณาใส่จำนวนครั้งที่จะได้รับรายได้จากรายการนี้',
+                                            message: 'กรุณากรอกจำนวนรอบการได้รับรายได้'
                                         },
                                     ]}
                                     hasFeedback
                                 >
-                                    <Input />
-                                    {/* <Select defaultValue="..." style={{ width: 120 }} onChange={handleChange}>
-                        <Option value="...">จนกว่าจะเกษียณ</Option>
-                        <Option value="...">จนกว่าจะเสียชีวิตได้</Option>
-                    </Select> */}
+                                    <Select style={{ width: 120 }}>
+                                        <Option value={30}>วัน</Option>
+                                        <Option value={4}>สัปดาห์</Option>
+                                        <Option value={1}>เดือน</Option>
+                                        <Option value={1 / 12}>ปี</Option>
+                                    </Select>
                                 </Form.Item>
 
                                 <Form.Item
@@ -148,6 +138,30 @@ function Income(props) {
                                 >
                                     <Input />
                                 </Form.Item>
+
+
+                                {/* <Form.Item
+                                    name="quantityOfIncome"
+                                    label="จะได้รับรายได้จากรายการนี้ทั้งหมดกี่รอบ (สามารถตั้งให้เป็นจำนวนครั้ง หรือ จนกว่าจะเกษียณ หรือ จนกว่าจะเสียชีวิตได้)"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'กรุณาใส่จำนวนครั้งที่จะได้รับรายได้จากรายการนี้',
+                                        },
+                                    ]}
+                                    hasFeedback
+                                >
+
+                                    <Select style={{ width: 240 }}>
+                                        <Input />
+                                        <Option value={monthRemainToRetired}>จนกว่าจะเกษียณ</Option>
+                                        <Option value={monthRemainToRestInPeace}>จนกว่าจะเสียชีวิตได้</Option>
+                                    </Select> 
+
+
+                                </Form.Item> */}
+
+
 
                                 {/* <Form.Item
                     name="valueOfCompoundInterest"
