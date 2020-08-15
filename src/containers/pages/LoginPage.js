@@ -22,7 +22,7 @@ const tailLayout = {
 function LoginPage(props) {
 
     const onFinish = async(values) => {
-        console.log('Success:', values);
+    
         const body = {
             username:values.username,
             password:values.password

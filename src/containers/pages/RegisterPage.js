@@ -28,7 +28,7 @@ function RegisterPage(props) {
             })
             .catch(err => {
                 notification.error({
-                    message: `Register is incorrect please fill all information`
+                    message: `User already taken or Something is wrong.`
                 })
             })
     };

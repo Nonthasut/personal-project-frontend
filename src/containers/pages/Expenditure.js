@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 import LocalStorageService from '../../config/service'
 import axios from 'axios'
+import ExpenditureTable from '../../components/ExpenditureTable'
 
 function Expenditure(props) {
     const [form] = Form.useForm();
@@ -30,7 +31,9 @@ function Expenditure(props) {
         console.log('Received values of form: ', values);
         const body = {
             expenditure_list: values.expenditure_list,
-            expenditure_value: (values.numberUnitOfTime * values.unitOfTime) * values.valueOfExpenditure
+            expenditure_value: (values.numberUnitOfTime * values.unitOfTime) * values.valueOfExpenditure,
+            expenditure_quantity_per_month:  (values.numberUnitOfTime * values.unitOfTime),
+            expenditure_value_per_time: values.valueOfExpenditure
         }
 
         axios.post(`/expenditures`, body)
@@ -45,7 +48,7 @@ function Expenditure(props) {
                     message: `Cannot add expenditure's list.`
                 })
             })
-
+            window.location.reload(true)
     };
 
 
@@ -109,7 +112,7 @@ return (
                                 ]}
                                 hasFeedback
                             >
-                                <Select defaultValue="กรุณาเลือกหน่วย" style={{ width: 180 }}>
+                                <Select defaultValue="วัน/สัปดาห์/เดือน/ปี" style={{ width: 180 }}>
                                     <Option value={30}>วัน</Option>
                                     <Option value={4}>สัปดาห์</Option>
                                     <Option value={1}>เดือน</Option>
@@ -192,7 +195,7 @@ return (
                 </Layout>
             </Col>
         </Row>
-
+        <ExpenditureTable/>
 
     </div>
 )

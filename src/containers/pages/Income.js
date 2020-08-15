@@ -4,9 +4,13 @@ import jwtDecode from 'jwt-decode'
 import LocalStorageService from '../../config/service'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
+import IncomeTable from '../../components/IncomeTable'
+
 
 
 function Income(props) {
+
+    //form
 
     const [form] = Form.useForm();
 
@@ -33,13 +37,15 @@ function Income(props) {
 
     const monthRemainToRetired = Math.floor(((((new Date(userData.retired_time)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
     const monthRemainToRestInPeace = Math.floor(((((new Date(userData.rest_in_peace)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
-
+    const mouthBetweenRetiredAndRIP = Math.floor(((((new Date(userData.rest_in_peace)) - new Date(userData.retired_time)) / (1000 * 3600 * 24)) / 365) * 12)
 
     const onFinish = values => {
         console.log('Received values of form: ', values);
         const body = {
             income_list: values.income_list,
-            income_value: (values.numberUnitOfTime * values.unitOfTime) * values.valueOfIncome
+            income_value: (values.numberUnitOfTime * values.unitOfTime) * values.valueOfIncome,
+            income_quantity_per_month : (values.numberUnitOfTime * values.unitOfTime),
+            income_value_per_time : values.valueOfIncome
         }
 
         axios.post(`/incomes`, body)
@@ -47,16 +53,17 @@ function Income(props) {
                 notification.success({
                     message: `Add income's list already.`
                 })
-                
+
             })
             .catch(err => {
                 notification.error({
                     message: `Cannot add income's list.`
                 })
             })
-
+            window.location.reload(true)
     };
 
+    
 
     return (
         <div>
@@ -117,7 +124,7 @@ function Income(props) {
                                     ]}
                                     hasFeedback
                                 >
-                                    <Select defaultValue="กรุณาเลือกหน่วย" style={{ width: 180 }}>
+                                    <Select defaultValue="วัน/สัปดาห์/เดือน/ปี" style={{ width: 180 }}>
                                         <Option value={30}>วัน</Option>
                                         <Option value={4}>สัปดาห์</Option>
                                         <Option value={1}>เดือน</Option>
@@ -196,7 +203,7 @@ function Income(props) {
                     </Layout>
                 </Col>
             </Row>
-            <h1>รายรับต่อเดือน</h1>
+            <IncomeTable/>
         </div>
     )
 }

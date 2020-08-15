@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 import LocalStorageService from '../../config/service'
 import axios from 'axios'
-
+import TargetTable from '../../components/TargetTable'
 
 
 function Target(props) {
@@ -32,7 +32,9 @@ function Target(props) {
         console.log('Received values of form: ', values);
         const body = {
             target_list: values.target_list,
-            target_value: (values.numberUnitOfTime * values.unitOfTime) * values.valueOfTarget
+            target_value: (values.numberUnitOfTime * values.unitOfTime) * values.valueOfTarget,
+            target_quantity_per_month: (values.numberUnitOfTime * values.unitOfTime),
+            target_value_per_time:values.valueOfTarget
         }
 
         axios.post(`/targets`, body)
@@ -47,7 +49,7 @@ function Target(props) {
                     message: `Cannot add target's list.`
                 })
             })
-
+            window.location.reload(true)
     };
 
 return (
@@ -112,7 +114,7 @@ return (
                         ]}
                         hasFeedback
                     >
-                        <Select defaultValue="กรุณาเลือกหน่วย" style={{ width: 180 }}>
+                        <Select defaultValue="วัน/สัปดาห์/เดือน/ปี" style={{ width: 180 }}>
                             <Option value={30}>วัน</Option>
                             <Option value={4}>สัปดาห์</Option>
                             <Option value={1}>เดือน</Option>
@@ -195,7 +197,7 @@ return (
             </Col>
         </Row >
 
-
+                <TargetTable/>
 
         </div >
     )
