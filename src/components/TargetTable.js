@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Table } from 'antd';
 import axios from 'axios'
-
+import jwtDecode from 'jwt-decode'
+import LocalStorageService from '../config/service'
 
 function TargetTable() {
 
@@ -16,8 +17,8 @@ function TargetTable() {
             })
     }, [])
 
-    
-    const [userTotalTarget,setUserTotalTarget] = useState('')
+
+    const [userTotalTarget, setUserTotalTarget] = useState('')
 
     useEffect(() => {
         axios.get(`/targets/total`).then((res) => {
@@ -48,21 +49,46 @@ function TargetTable() {
             title: 'มูลค่าที่ต้องจ่าย (ต่อเดือน)',
             dataIndex: 'target_value'
         },
-    
+
     ];
+
+
+    const [userData, setUserData] = useState('')
+
+    useEffect(() => {
+        const token = LocalStorageService.getToken()
+        if (token) {
+            const user = jwtDecode(token)
+            axios.get(`/users/${user.id}`).then((res) => {
+                setUserData(res.data)
+            })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }, [])
+
+    const monthRemainToRetired = Math.floor(((((new Date(userData.retired_time)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
+    const monthRemainToRestInPeace = Math.floor(((((new Date(userData.rest_in_peace_time)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
+    const remainTimeAfterRetired = monthRemainToRestInPeace - monthRemainToRetired
+    console.log(remainTimeAfterRetired)
 
     const resultColumns = [
         {
-            title: 'มูลค่าสุทธิ์ของเป้าหมาย',
+            title: 'คุณต้องออมเงินเพื่อทำตามเป้าหมายที่คุณตั้งเอาไว้เป็นจำนวนทั้งสิ้น (เริ่มใช้เงินวันแรกคือวันเกษียณ)',
             dataIndex: 'target_total'
         }
     ]
 
+   
+
     const totalTarget = [
-    {
-        target_total: `${userTotalTarget}`    
-    }
-]
+        {
+            target_total: `${userTotalTarget*remainTimeAfterRetired}`
+        }
+    ]
+
+
 
     return (
         <div>

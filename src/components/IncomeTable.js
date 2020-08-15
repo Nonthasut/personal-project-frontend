@@ -52,8 +52,14 @@ function IncomeTable() {
             title: 'มูลค่ารายได้ (ต่อเดือน)',
             dataIndex: 'income_value'
         }
-       
-    
+        ,
+        {
+            title: 'ลบ/แก้ไข',
+            dataIndex: '',
+            render:()=> <a>Delete</a>
+
+        }
+
     ];
 
     const resultColumns = [
@@ -64,11 +70,11 @@ function IncomeTable() {
     ]
 
     const totalIncome = [
-    {
-        income_total: `${userTotalIncome}`    
-    }
-]
-    
+        {
+            income_total: `${userTotalIncome}`
+        }
+    ]
+
 
     return (
         <div>

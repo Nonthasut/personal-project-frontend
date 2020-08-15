@@ -31,7 +31,7 @@ function ExpenditureTable() {
 
     const resultColumns = [
         {
-            title: 'รวมกระแสรายได้ต่อเดือน',
+            title: 'รวมกระแสรายจ่ายต่อเดือน',
             dataIndex: 'expenditure_total'
         }
     ]

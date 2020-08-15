@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import Navbar from '../../components/Navbar'
 import { withRouter } from 'react-router-dom'
-import CalculateDateFn from '../../components/CalculateDateFn'
 import { Button } from 'antd'
 import jwtDecode from 'jwt-decode'
 import LocalStorageService from '../../config/service'
 import axios from 'axios'
+import UserResultTable from '../../components/UserResultTable'
 
 function ProfilePage(props) {
   const linkToEditProfile = () => {
@@ -45,6 +44,7 @@ function ProfilePage(props) {
       <p>คุณคาดว่าคุณจะมีชีวิตอยู่ถึงวันที่: {`${userData.rest_in_peace_time}`}</p>
       <p>ในตอนนั้นคุณจะมีอายุ: {`${calculateLifespan}`}</p>
       <Button onClick={linkToEditProfile}>Edit profile</Button>
+      <UserResultTable/>
       
     </div>
   )

@@ -10,7 +10,7 @@ import IncomeTable from '../../components/IncomeTable'
 
 function Income(props) {
 
-    //form
+ 
 
     const [form] = Form.useForm();
 
@@ -33,11 +33,6 @@ function Income(props) {
                 })
         }
     }, [])
-
-
-    const monthRemainToRetired = Math.floor(((((new Date(userData.retired_time)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
-    const monthRemainToRestInPeace = Math.floor(((((new Date(userData.rest_in_peace)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
-    const mouthBetweenRetiredAndRIP = Math.floor(((((new Date(userData.rest_in_peace)) - new Date(userData.retired_time)) / (1000 * 3600 * 24)) / 365) * 12)
 
     const onFinish = values => {
         console.log('Received values of form: ', values);

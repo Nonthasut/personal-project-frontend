@@ -24,8 +24,15 @@ function Expenditure(props) {
         }
     }, [])
     
+
     const monthRemainToRetired = Math.floor(((((new Date(userData.retired_time)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
-    const monthRemainToRestInPeace = Math.floor(((((new Date(userData.rest_in_peace)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
+    const monthRemainToRestInPeace = Math.floor(((((new Date(userData.rest_in_peace_time)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
+    const remainTimeAfterRetired = monthRemainToRestInPeace - monthRemainToRetired
+
+    // console.log(monthRemainToRetired)
+    // console.log(monthRemainToRestInPeace)
+    // console.log(remainTimeAfterRetired)
+
 
     const onFinish = values => {
         console.log('Received values of form: ', values);

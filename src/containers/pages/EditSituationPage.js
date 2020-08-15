@@ -25,8 +25,6 @@ function EditSituationPage(props) {
     }, [])
 
 const onFinish = values => {
-    console.log('Received values of form: ', values);
-
     const body = {
         name: values.name||userData.name,
         birthday: values.birthday||userData.birthday,
