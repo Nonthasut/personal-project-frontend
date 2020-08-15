@@ -47,7 +47,7 @@ function Income(props) {
                 notification.success({
                     message: `Add income's list already.`
                 })
-                props.history.push(`/incomes/${userData.id}`)
+                
             })
             .catch(err => {
                 notification.error({
@@ -112,12 +112,12 @@ function Income(props) {
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'กรุณากรอกจำนวนรอบการได้รับรายได้'
+                                            message: 'กรุณาเลือกหน่วย'
                                         },
                                     ]}
                                     hasFeedback
                                 >
-                                    <Select style={{ width: 120 }}>
+                                    <Select defaultValue="กรุณาเลือกหน่วย" style={{ width: 180 }}>
                                         <Option value={30}>วัน</Option>
                                         <Option value={4}>สัปดาห์</Option>
                                         <Option value={1}>เดือน</Option>
@@ -127,7 +127,7 @@ function Income(props) {
 
                                 <Form.Item
                                     name="valueOfIncome"
-                                    label="มูลค่ารายได้ของรายการนี้"
+                                    label="มูลค่ารายได้ของรายการนี้(ต่อ1ครั้ง)"
                                     rules={[
                                         {
                                             required: true,
@@ -193,10 +193,10 @@ function Income(props) {
                                 </Form.Item>
                             </Form>
                         </Content>
-
                     </Layout>
                 </Col>
             </Row>
+            <h1>รายรับต่อเดือน</h1>
         </div>
     )
 }

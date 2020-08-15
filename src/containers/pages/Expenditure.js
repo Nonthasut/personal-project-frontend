@@ -38,7 +38,7 @@ function Expenditure(props) {
                 notification.success({
                     message: `Add expenditure's list already.`
                 })
-                props.history.push(`/expenditures/${userData.id}`)
+               
             })
             .catch(err => {
                 notification.error({
@@ -100,16 +100,16 @@ return (
 
                             <Form.Item
                                 name='unitOfTime'
-                                label='ต่อครั้ง'
+                                label='ครั้งต่อ'
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'กรุณากรอกจำนวนรอบการชำระรายจ่าย'
+                                        message: 'กรุณาเลือกหน่วย'
                                     },
                                 ]}
                                 hasFeedback
                             >
-                                <Select style={{ width: 120 }}>
+                                <Select defaultValue="กรุณาเลือกหน่วย" style={{ width: 180 }}>
                                     <Option value={30}>วัน</Option>
                                     <Option value={4}>สัปดาห์</Option>
                                     <Option value={1}>เดือน</Option>
@@ -119,7 +119,7 @@ return (
 
                             <Form.Item
                                 name="valueOfExpenditure"
-                                label="มูลค่ารายจ่ายของรายการนี้"
+                                label="มูลค่ารายจ่ายของรายการนี้(ต่อ1ครั้ง)"
                                 rules={[
                                     {
                                         required: true,

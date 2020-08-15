@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Navbar from '../../components/Navbar'
-import CalculateDateFn from '../../components/CalculateDateFn'
 import axios from '../../config/axios'
 import { Form, Input, Button, notification, DatePicker, Row, Col } from 'antd'
 import { withRouter } from 'react-router-dom'
@@ -54,7 +52,7 @@ const onFinish = values => {
 return (
     <div>
         Edit profile page
-        <Navbar />
+        
         <Form
             form={form}
             name="edit-profile"

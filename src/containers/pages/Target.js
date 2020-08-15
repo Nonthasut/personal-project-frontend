@@ -1,74 +1,144 @@
-import React from 'react'
-import Navbar from '../../components/Navbar'
-import { Form, Input, Button } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Form, Input, Button, Select, Layout, Menu, Breadcrumb, Col, Row, notification } from 'antd'
+import { withRouter } from 'react-router-dom'
+import jwtDecode from 'jwt-decode'
+import LocalStorageService from '../../config/service'
+import axios from 'axios'
 
 
- 
-function Target() {
+
+function Target(props) {
     const [form] = Form.useForm();
+    const { Option } = Select;
+    const { Header, Content } = Layout;
+    const [userData, setUserData] = useState('')
+    useEffect(() => {
+        const token = LocalStorageService.getToken()
+        if (token) {
+            const user = jwtDecode(token)
+            axios.get(`/users/${user.id}`).then((res) => {
+                setUserData(res.data)
+            })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }, [])
 
-    // const { Option } = Select;
-    // function handleChange(value) {
-    //     console.log(`selected ${value}`);
+    const monthRemainToRetired = Math.floor(((((new Date(userData.retired_time)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
+    const monthRemainToRestInPeace = Math.floor(((((new Date(userData.rest_in_peace)) - new Date()) / (1000 * 3600 * 24)) / 365) * 12)
 
-    // }
     const onFinish = values => {
         console.log('Received values of form: ', values);
+        const body = {
+            target_list: values.target_list,
+            target_value: (values.numberUnitOfTime * values.unitOfTime) * values.valueOfTarget
+        }
+
+        axios.post(`/targets`, body)
+            .then(res => {
+                notification.success({
+                    message: `Add target's list already.`
+                })
+               
+            })
+            .catch(err => {
+                notification.error({
+                    message: `Cannot add target's list.`
+                })
+            })
 
     };
-    return (
-        <div>
+
+return (
+    <div>
+        <Row justify='center'>
+            <Col xxl={12} xl={14}>
+            <Layout>
+                <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+                    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                    </Menu>
+                </Header>
+                <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
+                    <Form
+                        form={form}
+                        name='target'
+                        onFinish={onFinish}
+                    >
             Target
-           
+
 
             <h1>ในหัวข้อเป้าหมายจะคำนวณมูลค่าเริ่มจากวันที่เกษียณเป็นวันแรกไปจนถึงวันที่คาดว่าจะเสียชีวิต</h1>
-            <h2>คำแนะนำเบื้องต้น</h2> <br/>
-            <p>รายการที่คุณต้องคำนวณที่เป็นพื้นฐานที่สุดควรมีดังนี้ ค่าอาหารต่อวัน , ค่าสำรองเผื่อป่วย , ค่าสาธารณูปโภคพื้นฐาน , ค่าสำรองเผื่ออุบัติเหตุ นอกเหนือนี้ไม่ว่าจะครอบครัว,งานอดิเรก,ความฝัน,ความต้องการส่วนตัวระบุได้ตามที่ท่านได้ฝันไว้ว่าอยากจะครอบครองได้เลยครับ</p>
+                    <h2>คำแนะนำเบื้องต้น</h2> <br />
+                    <p>รายการที่คุณต้องคำนวณที่เป็นพื้นฐานที่สุดควรมีดังนี้ ค่าอาหารต่อวัน , ค่าสำรองเผื่อป่วย , ค่าสาธารณูปโภคพื้นฐาน , ค่าสำรองเผื่ออุบัติเหตุ นอกเหนือนี้ไม่ว่าจะครอบครัว,งานอดิเรก,ความฝัน,ความต้องการส่วนตัวระบุได้ตามที่ท่านได้ฝันไว้ว่าอยากจะครอบครองได้เลยครับ</p>
 
-            
-            <Form
-                form={form}
-                name='income'
-                onFinish={onFinish}
-            >
+                    <Form.Item
+                        name="target_list"
+                        label="รายการ"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'กรุณาใส่รายการเป้าหมาย',
+                            },
+                        ]}
+                        hasFeedback
+                    >
+                        <Input />
+                    </Form.Item>
 
-                <Form.Item
-                    name="target-list"
-                    label="ชื่อรายการของเป้าหมาย"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'กรุณาใส่รายการของเป้าหมาย',
-                        },
-                    ]}
-                    hasFeedback
-                >
-                    <Input />
-                </Form.Item>
+                    <Form.Item
+                        name="numberUnitOfTime"
+                        label='จะต้องชำระรายจ่ายจากรายการนี้ทุกๆ'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'กรุณากรอกจำนวนรอบการชำระรายจ่าย'
+                            },
+                        ]}
+                        hasFeedback
+                    >
 
-                <Form.Item
-                    name='unitOfTime'
-                    label='จะต้องชำระรายจ่ายของรายการนี้กี่ครั้ง'
-                    rules={[
-                        {
-                            required: true,
-                            message: 'กรุณากรอกจำนวนรอบการชำระรายจ่าย'
-                        },
-                    ]}
-                    hasFeedback
-                >
-                    <Input />
+                        <Input />
+                    </Form.Item>
 
-                    {/* <Select defaultValue="30" style={{ width: 120 }} onChange={handleChange}>
-                        <Option value="30">วัน</Option>
-                        <Option value="4">สัปดาห์</Option>
-                        <Option value="1">เดือน</Option>
-                        <Option value="0.083">ปี</Option>
-                    </Select> */}
+                    <Form.Item
+                        name='unitOfTime'
+                        label='ครั้งต่อ'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'กรุณาเลือกหน่วย'
+                            },
+                        ]}
+                        hasFeedback
+                    >
+                        <Select defaultValue="กรุณาเลือกหน่วย" style={{ width: 180 }}>
+                            <Option value={30}>วัน</Option>
+                            <Option value={4}>สัปดาห์</Option>
+                            <Option value={1}>เดือน</Option>
+                            <Option value={1 / 12}>ปี</Option>
+                        </Select>
+                    </Form.Item>
 
-                </Form.Item>
+                    <Form.Item
+                        name="valueOfTarget"
+                        label="มูลค่ารายจ่ายของรายการนี้(ต่อ1ครั้ง)"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'กรุณาใส่มูลค่าของรายจ่ายรายการนี้ต่อครั้ง',
+                            },
+                        ]}
+                        hasFeedback
+                    >
+                        <Input />
+                    </Form.Item>
 
-                <Form.Item
+
+
+
+
+                    {/* <Form.Item
                     name="quantityOfIncome"
                     label="จะต้องชำระรายจ่ายจากรายการนี้ทั้งหมดกี่รอบ (สามารถตั้งให้เป็นจำนวนครั้ง หรือ จนกว่าจะเสียชีวิตได้)"
                     rules={[
@@ -80,26 +150,13 @@ function Target() {
                     hasFeedback
                 >
                     <Input />
-                    {/* <Select defaultValue="..." style={{ width: 120 }} onChange={handleChange}>
+                    <Select defaultValue="..." style={{ width: 120 }} onChange={handleChange}>
                         <Option value="...">จนกว่าจะเกษียณ</Option>
                         <Option value="...">จนกว่าจะเสียชีวิตได้</Option>
-                    </Select> */}
-                </Form.Item>
+                    </Select>
+                </Form.Item> */}
 
-                <Form.Item
-                    name="valueOfIncome"
-                    label="มูลค่ารายจ่ายของรายการนี้ต่อรอบ<"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'กรุณาใส่มูลค่ารายจ่ายของรายการนี้ต่อรอบ',
-                        },
-                    ]}
-                    hasFeedback
-                >
-                    <Input />
-                </Form.Item>
-
+                    {/*             
                 <Form.Item
                     name="valueOfCompoundTarget"
                     label="รายการนี้มีการเติบโตจากมูลค่าต้นหรือไม่ คำนวณแบบเป็นต่อปี เช่น การเปลี่ยนฐานคำนวณดอกเบี้ย"
@@ -115,25 +172,33 @@ function Target() {
                     <Input />
 
 
-                    {/*    
+                       
                     <label for='value of compound interest'>
                         <p>รายการนี้มีการเติบโตจากมูลค่าต้นหรือไม่ คำนวณแบบเป็นต่อปี เช่น ฐานเงินเดือนเพิ่มขึ้นทุกๆปี</p> <br />
                         <p>*เป็นรูปแบบการเติบโตแบบดอกเบี้ยทบต้น(ยังไม่ได้คิดฟีเจอร์เพิ่มเงินต้นเข้าไปเอง)</p>
                         <input type='text' placeholder='1(R-r)**n' />
-                    </label> */}
-                </Form.Item>
+                    </label>
+                </Form.Item> */}
 
-                <Form.Item >
-                    <Button type="primary" htmlType="submit">
-                        Confirm
+
+
+                    <Form.Item >
+                        <Button type="primary" htmlType="submit">
+                            Confirm
                     </Button>
-                </Form.Item>
-            </Form>
+                    </Form.Item>
+
+                        </Form>
+                        </Content>
+
+                </Layout>
+            </Col>
+        </Row >
 
 
 
-        </div>
+        </div >
     )
 }
 
-export default Target
+export default withRouter(Target)
