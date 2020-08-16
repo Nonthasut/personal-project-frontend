@@ -6,6 +6,8 @@ import LocalStorageService from '../../config/service'
 import axios from 'axios'
 import ExpenditureTable from '../../components/ExpenditureTable'
 import Navbar from '../../components/Navbar'
+import LogOutButton from '../../components/LogOutButton'
+
 function Expenditure(props) {
     const [form] = Form.useForm();
     const { Option } = Select;
@@ -66,6 +68,9 @@ return (
             <Col xxl={12} xl={14}>
                 <Layout>
                     <Header>
+                    <Row justify='end'>
+                        <LogOutButton />
+                        </Row>
                         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
                         </Menu>
                     </Header>

@@ -27,25 +27,27 @@ function ProfilePage(props) {
 
   }, [])
 
-  const calculateAge = Math.floor((((new Date())-new Date(userData.birthday))/(1000*3600*24))/365) 
-  const calculateLifespan = Math.floor((((new Date(userData.rest_in_peace_time))-new Date(userData.birthday))/(1000*3600*24))/365) 
- 
+  const calculateAge = Math.floor((((new Date()) - new Date(userData.birthday)) / (1000 * 3600 * 24)) / 365)
+  const calculateRetiredAge = Math.floor((((new Date(userData.retired_time)) - new Date(userData.birthday)) / (1000 * 3600 * 24)) / 365)
+  const calculateLifespan = Math.floor((((new Date(userData.rest_in_peace_time)) - new Date(userData.birthday)) / (1000 * 3600 * 24)) / 365)
+
 
 
   return (
     <div>
 
       <h1>ProfilePage</h1>
-      <Navbar/>
+      <Navbar />
       <p>Name: {`${userData.name}`} </p>
       <p>Birthdate: {`${userData.birthday}`}</p>
       <p>Age: {`${calculateAge}`}</p>
       <p>คุณตั้งเป้าหมายว่าจะเกษียณวันที่: {`${userData.retired_time}`}</p>
+      <p>คุณตั้งเป้าหมายว่าจะเกษียณตอนอายุ: {`${calculateRetiredAge}`}</p>
       <p>คุณคาดว่าคุณจะมีชีวิตอยู่ถึงวันที่: {`${userData.rest_in_peace_time}`}</p>
       <p>ในตอนนั้นคุณจะมีอายุ: {`${calculateLifespan}`}</p>
       <Button onClick={linkToEditProfile}>Edit profile</Button>
-      <UserResultTable/>
-      
+      <UserResultTable />
+
     </div>
   )
 }

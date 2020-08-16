@@ -6,7 +6,7 @@ import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 import IncomeTable from '../../components/IncomeTable'
 import Navbar from '../../components/Navbar'
-
+import LogOutButton from '../../components/LogOutButton'
 
 function Income(props) {
 
@@ -66,6 +66,9 @@ function Income(props) {
                 <Col xxl={12} xl={14}>
                     <Layout>
                         <Header>
+                        <Row justify='end'>
+                        <LogOutButton />
+                        </Row>
                             <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
                             </Menu>
                         </Header>

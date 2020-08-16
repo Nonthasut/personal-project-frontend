@@ -13,7 +13,7 @@ const layout = {
 
 const tailLayout = {
     wrapperCol: {
-        offset: 8,
+        offset: 4,
         span: 16,
     },
 };
@@ -96,7 +96,7 @@ return (
                     Login
                      </Button>
             </Form.Item>
-                <p onClick={linkToRegister}>Register</p>
+               <Button type="link" onClick={linkToRegister}>Register</Button>
         </Form>
        </Col>
        <Col span={4}></Col>
