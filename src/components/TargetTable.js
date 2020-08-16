@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table } from 'antd';
+import { Table, Popconfirm, notification } from 'antd';
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import LocalStorageService from '../config/service'
@@ -29,7 +29,7 @@ function TargetTable() {
             })
     }, [])
 
-
+    const [idTargetData, setIdTargetData] = useState('')
 
     const columns = [
         {
@@ -49,6 +49,32 @@ function TargetTable() {
             title: 'มูลค่าที่ต้องจ่าย (ต่อเดือน)',
             dataIndex: 'target_value'
         },
+        {
+            title: 'ลบ',
+            render: () => (
+                <Popconfirm title="Sure to delete?"
+                    onConfirm={() => {
+                        axios.delete(`/targets/${idTargetData}`)
+                            .then(res => {
+                                notification.success({
+                                    message: `Delete list already`
+                                })
+
+                            })
+                            .catch(err => {
+                                notification.error({
+                                    message: `Cannot delete`
+                                })
+                            })
+                        window.location.reload(true)
+
+                    }
+                    }>
+                    <a>Delete</a>
+                </Popconfirm>)
+        }
+
+
 
     ];
 
@@ -80,11 +106,11 @@ function TargetTable() {
         }
     ]
 
-   
+
 
     const totalTarget = [
         {
-            target_total: `${userTotalTarget*remainTimeAfterRetired}`
+            target_total: `${userTotalTarget * remainTimeAfterRetired}`
         }
     ]
 
@@ -92,8 +118,17 @@ function TargetTable() {
 
     return (
         <div>
-            <Table columns={columns} dataSource={userTargetData} />
-            <Table columns={resultColumns} dataSource={totalTarget} />
+            <Table
+                columns={columns.filter(col => col.dataIndex !== 'id')}
+                dataSource={userTargetData}
+                onRow={(record, rowIndex) => {
+                    return {
+                        onClick: e => { setIdTargetData(record.id) }
+                    }
+                }
+                }
+            />
+            <Table columns={resultColumns} dataSource={totalTarget} pagination={false} />
         </div>
     )
 }

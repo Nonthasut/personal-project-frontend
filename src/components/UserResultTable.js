@@ -149,11 +149,11 @@ function UserResultTable() {
 
     return (
         <div>
-            <Table columns={columnsIncome} dataSource={totalIncome} />
-            <Table columns={columnsExpenditure} dataSource={totalExpenditure} />
-            <Table columns={columnsCashflow} dataSource={totalCashflow} />
-            <Table columns={resultColumns} dataSource={totalTarget} />
-            <Table columns={columnsPossible} dataSource={totalPossible} />
+            <Table columns={columnsIncome} dataSource={totalIncome} pagination={false}/>
+            <Table columns={columnsExpenditure} dataSource={totalExpenditure} pagination={false}/>
+            <Table columns={columnsCashflow} dataSource={totalCashflow} pagination={false}/>
+            <Table columns={resultColumns} dataSource={totalTarget} pagination={false}/>
+            <Table columns={columnsPossible} dataSource={totalPossible} pagination={false}/>
 
         </div>
     )

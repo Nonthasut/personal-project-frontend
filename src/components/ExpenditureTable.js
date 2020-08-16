@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table } from 'antd';
+import { Table, Popconfirm, notification } from 'antd';
 import axios from 'axios'
 
 
@@ -37,13 +37,17 @@ function ExpenditureTable() {
     ]
 
     const totalExpenditure = [
-    {
-        expenditure_total: `${userTotalExpenditure}`    
-    }
-]
+        {
+            expenditure_total: `${userTotalExpenditure}`
+        }
+    ]
 
-
+    const [idExpenditureData, setIdExpenditureData] = useState('')
     const columns = [
+        {
+            title: 'id',
+            dataIndex: 'id',
+        },
         {
             title: 'รายการรายจ่าย',
             dataIndex: 'expenditure_list',
@@ -61,16 +65,48 @@ function ExpenditureTable() {
         {
             title: 'มูลค่ารายจ่าย (ต่อเดือน)',
             dataIndex: 'expenditure_value'
+        } ,
+        {
+            title: 'ลบ',
+            render: () => (
+                <Popconfirm title="Sure to delete?"
+                    onConfirm={() => {
+                        axios.delete(`/expenditures/${idExpenditureData}`)
+                            .then(res => {
+                                notification.success({
+                                    message: `Delete list already`
+                                })
+
+                            })
+                            .catch(err => {
+                                notification.error({
+                                    message: `Cannot delete`
+                                })
+                            })
+                        window.location.reload(true)
+
+                    }
+                    }>
+                    <a>Delete</a>
+                </Popconfirm>)
         }
-        
-    
+
+
     ];
 
-    
+
     return (
         <div>
-            <Table columns={columns} dataSource={userExpenditureData} />
-            <Table columns={resultColumns} dataSource={totalExpenditure} />
+            <Table columns={columns.filter(col => col.dataIndex !== 'id')}
+                dataSource={userExpenditureData}
+                onRow={(record, rowIndex) => {
+                    return {
+                        onClick: e => { setIdExpenditureData(record.id) }
+                    }
+                }
+                }
+            />
+            <Table columns={resultColumns} dataSource={totalExpenditure} pagination={false} />
         </div>
     )
 }

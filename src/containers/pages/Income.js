@@ -5,7 +5,7 @@ import LocalStorageService from '../../config/service'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 import IncomeTable from '../../components/IncomeTable'
-
+import Navbar from '../../components/Navbar'
 
 
 function Income(props) {
@@ -65,19 +65,19 @@ function Income(props) {
             <Row justify='center'>
                 <Col xxl={12} xl={14}>
                     <Layout>
-                        <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+                        <Header>
                             <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
                             </Menu>
                         </Header>
-                        <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
-
+                        <Content className="site-layout" style={{ padding: '0 50px', marginTop: 20 }}>
+                        <Navbar/>
 
                             <Form
                                 form={form}
                                 name='income'
                                 onFinish={onFinish}
                             >
-                                Income
+                                <h1>รายได้</h1>
                 <Form.Item
                                     name="income_list"
                                     label="รายการ"
@@ -194,11 +194,12 @@ function Income(props) {
                     </Button>
                                 </Form.Item>
                             </Form>
+                            <IncomeTable/>
                         </Content>
                     </Layout>
                 </Col>
             </Row>
-            <IncomeTable/>
+           
         </div>
     )
 }

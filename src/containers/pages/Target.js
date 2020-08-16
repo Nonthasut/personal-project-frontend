@@ -5,8 +5,7 @@ import jwtDecode from 'jwt-decode'
 import LocalStorageService from '../../config/service'
 import axios from 'axios'
 import TargetTable from '../../components/TargetTable'
-
-
+import Navbar from '../../components/Navbar'
 function Target(props) {
     const [form] = Form.useForm();
     const { Option } = Select;
@@ -40,7 +39,7 @@ function Target(props) {
             target_list: values.target_list,
             target_value: (values.numberUnitOfTime * values.unitOfTime) * values.valueOfTarget,
             target_quantity_per_month: (values.numberUnitOfTime * values.unitOfTime),
-            target_value_per_time:values.valueOfTarget
+            target_value_per_time: values.valueOfTarget
         }
 
         axios.post(`/targets`, body)
@@ -48,105 +47,104 @@ function Target(props) {
                 notification.success({
                     message: `Add target's list already.`
                 })
-               
+
             })
             .catch(err => {
                 notification.error({
                     message: `Cannot add target's list.`
                 })
             })
-            window.location.reload(true)
+        window.location.reload(true)
     };
 
-return (
-    <div>
-        <Row justify='center'>
-            <Col xxl={12} xl={14}>
-            <Layout>
-                <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-                    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-                    </Menu>
-                </Header>
-                <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
-                    <Form
-                        form={form}
-                        name='target'
-                        onFinish={onFinish}
-                    >
-            Target
+    return (
+        <div>
+            <Row justify='center'>
+                <Col xxl={12} xl={14}>
+                    <Layout>
+                        <Header>
+                            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                            </Menu>
+                        </Header>
+                        <Content className="site-layout" style={{ padding: '0 50px', marginTop: 20 }}>
+                            <Form
+                                form={form}
+                                name='target'
+                                onFinish={onFinish}
+                            >
+                                <Navbar/>
+                                <h1>เป้าหมาย</h1>
+                                <p>ในหัวข้อเป้าหมายจะคำนวณมูลค่าเริ่มจากวันที่เกษียณเป็นวันแรกไปจนถึงวันที่คาดว่าจะเสียชีวิต</p>
+                                <h3>คำแนะนำเบื้องต้น</h3>
+                                <p>รายการที่คุณต้องคำนวณที่เป็นพื้นฐานที่สุดควรมีดังนี้ ค่าอาหารต่อวัน , ค่าสำรองเผื่อป่วย , ค่าสาธารณูปโภคพื้นฐาน , ค่าสำรองเผื่ออุบัติเหตุ นอกเหนือนี้ไม่ว่าจะครอบครัว,งานอดิเรก,ความฝัน,ความต้องการส่วนตัวระบุได้ตามที่ท่านได้ฝันไว้ว่าอยากจะครอบครองได้เลยครับ</p>
 
+                                <Form.Item
+                                    name="target_list"
+                                    label="รายการ"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'กรุณาใส่รายการเป้าหมาย',
+                                        },
+                                    ]}
+                                    hasFeedback
+                                >
+                                    <Input />
+                                </Form.Item>
 
-            <h1>ในหัวข้อเป้าหมายจะคำนวณมูลค่าเริ่มจากวันที่เกษียณเป็นวันแรกไปจนถึงวันที่คาดว่าจะเสียชีวิต</h1>
-                    <h2>คำแนะนำเบื้องต้น</h2> <br />
-                    <p>รายการที่คุณต้องคำนวณที่เป็นพื้นฐานที่สุดควรมีดังนี้ ค่าอาหารต่อวัน , ค่าสำรองเผื่อป่วย , ค่าสาธารณูปโภคพื้นฐาน , ค่าสำรองเผื่ออุบัติเหตุ นอกเหนือนี้ไม่ว่าจะครอบครัว,งานอดิเรก,ความฝัน,ความต้องการส่วนตัวระบุได้ตามที่ท่านได้ฝันไว้ว่าอยากจะครอบครองได้เลยครับ</p>
+                                <Form.Item
+                                    name="numberUnitOfTime"
+                                    label='จะต้องชำระรายจ่ายจากรายการนี้ทุกๆ'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'กรุณากรอกจำนวนรอบการชำระรายจ่าย'
+                                        },
+                                    ]}
+                                    hasFeedback
+                                >
 
-                    <Form.Item
-                        name="target_list"
-                        label="รายการ"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'กรุณาใส่รายการเป้าหมาย',
-                            },
-                        ]}
-                        hasFeedback
-                    >
-                        <Input />
-                    </Form.Item>
+                                    <Input />
+                                </Form.Item>
 
-                    <Form.Item
-                        name="numberUnitOfTime"
-                        label='จะต้องชำระรายจ่ายจากรายการนี้ทุกๆ'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'กรุณากรอกจำนวนรอบการชำระรายจ่าย'
-                            },
-                        ]}
-                        hasFeedback
-                    >
+                                <Form.Item
+                                    name='unitOfTime'
+                                    label='ครั้งต่อ'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'กรุณาเลือกหน่วย'
+                                        },
+                                    ]}
+                                    hasFeedback
+                                >
+                                    <Select defaultValue="วัน/สัปดาห์/เดือน/ปี" style={{ width: 180 }}>
+                                        <Option value={30}>วัน</Option>
+                                        <Option value={4}>สัปดาห์</Option>
+                                        <Option value={1}>เดือน</Option>
+                                        <Option value={1 / 12}>ปี</Option>
+                                    </Select>
+                                </Form.Item>
 
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        name='unitOfTime'
-                        label='ครั้งต่อ'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'กรุณาเลือกหน่วย'
-                            },
-                        ]}
-                        hasFeedback
-                    >
-                        <Select defaultValue="วัน/สัปดาห์/เดือน/ปี" style={{ width: 180 }}>
-                            <Option value={30}>วัน</Option>
-                            <Option value={4}>สัปดาห์</Option>
-                            <Option value={1}>เดือน</Option>
-                            <Option value={1 / 12}>ปี</Option>
-                        </Select>
-                    </Form.Item>
-
-                    <Form.Item
-                        name="valueOfTarget"
-                        label="มูลค่ารายจ่ายของรายการนี้(ต่อ1ครั้ง)"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'กรุณาใส่มูลค่าของรายจ่ายรายการนี้ต่อครั้ง',
-                            },
-                        ]}
-                        hasFeedback
-                    >
-                        <Input />
-                    </Form.Item>
-
-
+                                <Form.Item
+                                    name="valueOfTarget"
+                                    label="มูลค่ารายจ่ายของรายการนี้(ต่อ1ครั้ง)"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'กรุณาใส่มูลค่าของรายจ่ายรายการนี้ต่อครั้ง',
+                                        },
+                                    ]}
+                                    hasFeedback
+                                >
+                                    <Input />
+                                </Form.Item>
 
 
 
-                    {/* <Form.Item
+
+
+                                {/* <Form.Item
                     name="quantityOfIncome"
                     label="จะต้องชำระรายจ่ายจากรายการนี้ทั้งหมดกี่รอบ (สามารถตั้งให้เป็นจำนวนครั้ง หรือ จนกว่าจะเสียชีวิตได้)"
                     rules={[
@@ -164,7 +162,7 @@ return (
                     </Select>
                 </Form.Item> */}
 
-                    {/*             
+                                {/*             
                 <Form.Item
                     name="valueOfCompoundTarget"
                     label="รายการนี้มีการเติบโตจากมูลค่าต้นหรือไม่ คำนวณแบบเป็นต่อปี เช่น การเปลี่ยนฐานคำนวณดอกเบี้ย"
@@ -190,20 +188,20 @@ return (
 
 
 
-                    <Form.Item >
-                        <Button type="primary" htmlType="submit">
-                            Confirm
+                                <Form.Item >
+                                    <Button type="primary" htmlType="submit">
+                                        Confirm
                     </Button>
-                    </Form.Item>
+                                </Form.Item>
 
-                        </Form>
+                            </Form>
+                            <TargetTable />
                         </Content>
 
-                </Layout>
-            </Col>
-        </Row >
+                    </Layout>
+                </Col>
+            </Row >
 
-                <TargetTable/>
 
         </div >
     )

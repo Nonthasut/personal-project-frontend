@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table } from 'antd';
+import { Table, Popconfirm, notification } from 'antd';
 import axios from 'axios'
 
 
@@ -19,6 +19,7 @@ function IncomeTable() {
     }, [])
 
 
+
     const [userTotalIncome, setUserTotalIncome] = useState('')
 
     useEffect(() => {
@@ -30,10 +31,13 @@ function IncomeTable() {
             })
     }, [])
 
-
-
+    const [idIncomeData, setIdIncomeData] = useState('')
 
     const columns = [
+        {
+            title: 'id',
+            dataIndex: 'id',
+        },
         {
             title: 'รายการรายได้',
             dataIndex: 'income_list',
@@ -54,10 +58,28 @@ function IncomeTable() {
         }
         ,
         {
-            title: 'ลบ/แก้ไข',
-            dataIndex: '',
-            render:()=> <a>Delete</a>
+            title: 'ลบ',
+            render: () => (
+                <Popconfirm title="Sure to delete?"
+                    onConfirm={() => {
+                        axios.delete(`/incomes/${idIncomeData}`)
+                            .then(res => {
+                                notification.success({
+                                    message: `Delete list already`
+                                })
 
+                            })
+                            .catch(err => {
+                                notification.error({
+                                    message: `Cannot delete`
+                                })
+                            })
+                        window.location.reload(true)
+
+                    }
+                    }>
+                    <a>Delete</a>
+                </Popconfirm>)
         }
 
     ];
@@ -78,8 +100,17 @@ function IncomeTable() {
 
     return (
         <div>
-            <Table columns={columns} dataSource={userIncomeData} />
-            <Table columns={resultColumns} dataSource={totalIncome} />
+            <Table
+                columns={columns.filter(col => col.dataIndex !== 'id')}
+                dataSource={userIncomeData}
+                onRow={(record, rowIndex) => {
+                    return {
+                        onClick: e => { setIdIncomeData(record.id) }
+                    }
+                }
+                }
+            />
+            <Table columns={resultColumns} dataSource={totalIncome} pagination={false} />
 
         </div>
     )

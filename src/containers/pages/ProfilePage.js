@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode'
 import LocalStorageService from '../../config/service'
 import axios from 'axios'
 import UserResultTable from '../../components/UserResultTable'
-
+import Navbar from '../../components/Navbar'
 function ProfilePage(props) {
   const linkToEditProfile = () => {
     props.history.push('/edit-profile')
@@ -36,7 +36,7 @@ function ProfilePage(props) {
     <div>
 
       <h1>ProfilePage</h1>
-      
+      <Navbar/>
       <p>Name: {`${userData.name}`} </p>
       <p>Birthdate: {`${userData.birthday}`}</p>
       <p>Age: {`${calculateAge}`}</p>

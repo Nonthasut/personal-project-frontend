@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode'
 import LocalStorageService from '../../config/service'
 import axios from 'axios'
 import ExpenditureTable from '../../components/ExpenditureTable'
-
+import Navbar from '../../components/Navbar'
 function Expenditure(props) {
     const [form] = Form.useForm();
     const { Option } = Select;
@@ -65,17 +65,18 @@ return (
         <Row justify='center'>
             <Col xxl={12} xl={14}>
                 <Layout>
-                    <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+                    <Header>
                         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
                         </Menu>
                     </Header>
-                    <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
+                    <Content className="site-layout" style={{ padding: '0 50px', marginTop: 20 }}>
                     <Form
                         form={form}
                         name='expenditure'
                         onFinish={onFinish}
-                    >
-                        Expenditure
+                    >   
+                    <Navbar/>
+                        <h1>รายจ่าย</h1>
 
                             <Form.Item
                                 name="expenditure_list"
@@ -197,12 +198,12 @@ return (
                     </Button>
                             </Form.Item>
                         </Form>
+        <ExpenditureTable/>
                         </Content>
 
                 </Layout>
             </Col>
         </Row>
-        <ExpenditureTable/>
 
     </div>
 )
